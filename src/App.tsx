@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { OptionsDialog } from "./OptionsDialog.tsx";
+import { loadOptions, resolveAppearance, saveOptions, type Options } from "./lib/options.ts";
 import { MapView, type MapShape, type MapStop, type MapVehicle } from "./MapView.tsx";
 import { getAlerts, getArrivals, getLines, getPattern, getShape, getStops, getVehicles, googleRoutes, lisbonDate } from "./lib/api.ts";
 import { buildGeometry, estimateEta, formatEta, SpeedTracker, type PatternGeometry } from "./lib/eta.ts";
@@ -6,7 +8,6 @@ import { loadFavorites, saveFavorites, toggle, type Favorites } from "./lib/favo
 import { mergeOptions, newId, optionsFromRoutes, searchTimes, tripLineIds, tripPatternIds, type Group, type Trip, type TripOption } from "./lib/trips.ts";
 import { stripAgency, type Alert, type Arrival, type HubVehicle, type Line, type Pattern, type Stop } from "./lib/types.ts";
 
-const POLL_MS = 7000;
 type Tab = "linhas" | "paragem" | "alertas" | "favoritos" | "google";
 interface Sel {
   line: Line;
@@ -40,6 +41,22 @@ export function App() {
   const [vehicles, setVehicles] = useState<HubVehicle[]>([]);
   const [fetchedAt, setFetchedAt] = useState(0);
   const [now, setNow] = useState(Date.now());
+  const [options, setOptions] = useState<Options>(loadOptions);
+  const [showOptions, setShowOptions] = useState(false);
+  const [hiddenTags, setHiddenTags] = useState(0);
+  const [systemDark, setSystemDark] = useState(() => matchMedia("(prefers-color-scheme: dark)").matches);
+  const theme = resolveAppearance(options.appearance, systemDark);
+  useEffect(() => {
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const on = () => setSystemDark(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#ffffff" : theme === "radar" ? "#07121a" : "#121826");
+    saveOptions(options);
+  }, [theme, options]);
   const [favs, setFavs] = useState<Favorites>(loadFavorites);
   const [stopId, setStopId] = useState<string | null>(null);
   const tracker = useRef(new SpeedTracker());
@@ -85,9 +102,9 @@ export function App() {
       }
     };
     tick();
-    const t = setInterval(tick, POLL_MS);
+    const t = setInterval(tick, options.pollSeconds * 1000);
     return () => ((stop = true), ctl.abort(), clearInterval(t));
-  }, [followedKey]);
+  }, [followedKey, options.pollSeconds]);
 
   const colorFor = (lineId: string) => {
     let c = colors.current.get(lineId);
@@ -199,21 +216,26 @@ export function App() {
 
   return (
     <>
-      <MapView shapes={mapShapes} stops={mapStops} vehicles={mapVehicles} marks={{ origin: gOrigin, destination: gDest }} fitKey={fitKey} onStop={openStop} onMapClick={onMapClick} />
+      <MapView shapes={mapShapes} stops={mapStops} vehicles={mapVehicles} marks={{ origin: gOrigin, destination: gDest }} fitKey={fitKey} options={options} theme={theme} onStop={openStop} onMapClick={onMapClick} onHiddenTags={setHiddenTags} />
       {followed.length > 0 && (
         <div className="topbar">
           <span className={`dot${newestAge > 60 ? " old" : ""}`} />
-          {vehicles.length} veículos · dado mais recente há {newestAge} s{oldestAge > 120 ? ` (mais antigo ${oldestAge} s)` : ""}
+          {vehicles.length} veículos · dado mais recente há {newestAge} s{hiddenTags > 0 ? ` · ${hiddenTags} etiquetas ocultas` : ""}{oldestAge > 120 ? ` (mais antigo ${oldestAge} s)` : ""}
         </div>
       )}
       {view === "map" && (
-        <button className="fab" aria-label="Mostrar painel" onClick={() => setView("split")}>☰</button>
+        <>
+          <button className="fab sm" aria-label="Opções" onClick={() => setShowOptions(true)}>⚙</button>
+          <button className="fab" aria-label="Mostrar painel" onClick={() => setView("split")}>☰</button>
+        </>
       )}
+      {showOptions && <OptionsDialog options={options} onChange={setOptions} onClose={() => setShowOptions(false)} />}
       <div className={`sheet ${view}`}>
         <div className="sheet-head">
           <button className="grab" aria-label="Expandir/recolher" onClick={() => setView(view === "min" ? "split" : "min")} />
-          <button className="ibtn" aria-label={view === "panel" ? "Reduzir painel" : "Painel em ecrã inteiro"} onClick={() => setView(view === "panel" ? "split" : "panel")}>{view === "panel" ? "⤓" : "⤢"}</button>
-          <button className="ibtn" aria-label="Mapa em ecrã inteiro" onClick={() => setView("map")}>🗺</button>
+          <button className="ibtn l1" aria-label="Opções" onClick={() => setShowOptions(true)}>⚙</button>
+          <button className="ibtn r1" aria-label={view === "panel" ? "Reduzir painel" : "Painel em ecrã inteiro"} onClick={() => setView(view === "panel" ? "split" : "panel")}>{view === "panel" ? "⤓" : "⤢"}</button>
+          <button className="ibtn r2" aria-label="Mapa em ecrã inteiro" onClick={() => setView("map")}>🗺</button>
         </div>
         <div className="tabs">
           {(["linhas", "paragem", "alertas", "favoritos", "google"] as Tab[]).map((t) => (
