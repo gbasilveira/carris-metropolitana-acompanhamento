@@ -27,3 +27,7 @@ npm run build
 - O worker do MapLibre é copiado para `public/maplibre/` (`npm run copy-worker`, corre em `postinstall`/`dev`/`build`).
 - Segurança: a chave nunca vai para o cliente, ficheiros ou commits; `.env` está no `.gitignore`.
 - Deploy: `server/` precisa de um alojamento próprio (ou adaptar `computeRoutes` a uma função serverless); `/api/google` tem de apontar para ele.
+
+## Aspeto e opções (⚙)
+- Estilos: Auto (segue o sistema), Claro, Escuro (modernos) e Radar (painel de controlo aéreo). Guardados em `localStorage` (`carris-opcoes-v1`).
+- Etiquetas dos veículos: completas / compactas / só linha / nenhuma. `src/lib/labels.ts` coloca-as sem sobreposição (8 posições, 3 níveis de detalhe, dentro do ecrã); as que não cabem escondem-se e o número aparece na barra de estado.
