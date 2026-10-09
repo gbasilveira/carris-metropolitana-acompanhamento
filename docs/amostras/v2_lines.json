@@ -1,0 +1,55 @@
+[
+ {
+  "color": "#C61D23",
+  "district_ids": [
+   "11"
+  ],
+  "facilities": [],
+  "id": "1001",
+  "locality_ids": [
+   "022298"
+  ],
+  "long_name": "Alfragide (Estr Seminario) - Reboleira (Estação)",
+  "municipality_ids": [
+   "1115"
+  ],
+  "pattern_ids": [
+   "1001_0_2",
+   "1001_0_1"
+  ],
+  "region_ids": [],
+  "route_ids": [
+   "1001_0"
+  ],
+  "short_name": "1001",
+  "stop_ids": [],
+  "text_color": "#FFFFFF",
+  "tts_name": "Linha 1001 com percurso Alfragide ( Estrada Seminario ) - Reboleira ( - Estaçaão )"
+ },
+ {
+  "color": "#C61D23",
+  "district_ids": [
+   "11"
+  ],
+  "facilities": [],
+  "id": "1002",
+  "locality_ids": [
+   "022298"
+  ],
+  "long_name": "Reboleira (Estação) | Circular via Alfragide (Centro comercial ) e Amadora (Estação Sul)",
+  "municipality_ids": [
+   "1115"
+  ],
+  "pattern_ids": [
+   "1002_0_3"
+  ],
+  "region_ids": [],
+  "route_ids": [
+   "1002_0"
+  ],
+  "short_name": "1002",
+  "stop_ids": [],
+  "text_color": "#FFFFFF",
+  "tts_name": "Linha 1002 com percurso Reboleira ( - Estaçaão ) | Circular Via Alfragide ( Centro Comercial ) E Amadora ( - Estaçaão Sul )"
+ }
+]

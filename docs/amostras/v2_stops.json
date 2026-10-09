@@ -1,0 +1,53 @@
+[
+ {
+  "district_id": "11",
+  "district_name": null,
+  "facilities": [],
+  "id": "7822",
+  "lat": 38.7713307,
+  "line_ids": [],
+  "locality_id": "022406",
+  "locality_name": null,
+  "lon": -9.0977618,
+  "long_name": "Av. D. João II",
+  "municipality_id": "1106",
+  "municipality_name": null,
+  "parish_id": "110662",
+  "parish_name": null,
+  "pattern_ids": [],
+  "route_ids": [],
+  "short_name": null,
+  "tts_name": "Av. D. João II",
+  "wheelchair_boarding": false
+ },
+ {
+  "district_id": "15",
+  "district_name": null,
+  "facilities": [],
+  "id": "010001",
+  "lat": 38.754244,
+  "line_ids": [
+   "4001",
+   "4002"
+  ],
+  "locality_id": "022857",
+  "locality_name": null,
+  "lon": -8.959557,
+  "long_name": "Rua Carlos Manuel Rodrigues Francisco (Escola)",
+  "municipality_id": "1502",
+  "municipality_name": null,
+  "parish_id": "150201",
+  "parish_name": null,
+  "pattern_ids": [
+   "4001_0_3",
+   "4002_0_3"
+  ],
+  "route_ids": [
+   "4001_0",
+   "4002_0"
+  ],
+  "short_name": null,
+  "tts_name": "Rua Carlos Manuel Rodrigues Francisco ( Escola )",
+  "wheelchair_boarding": false
+ }
+]

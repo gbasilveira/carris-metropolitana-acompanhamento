@@ -1,0 +1,29 @@
+[
+ {
+  "trip_id": "[YYS70][LTP61]0303A1835U1",
+  "vehicle_id": "79",
+  "stop_sequence": 2,
+  "stop_id": "210005",
+  "stop_name": "Cais do Sodré",
+  "eta_seconds": -226718,
+  "eta_at": 1791309563000
+ },
+ {
+  "trip_id": "[YYS70][LTP61]0303A1900U1",
+  "vehicle_id": "72",
+  "stop_sequence": 2,
+  "stop_id": "210005",
+  "stop_name": "Cais do Sodré",
+  "eta_seconds": -225170,
+  "eta_at": 1791311111000
+ },
+ {
+  "trip_id": "[YYS70][LTP61]0305A1820U1",
+  "vehicle_id": "72",
+  "stop_sequence": 2,
+  "stop_id": "210003",
+  "stop_name": "Seixal",
+  "eta_seconds": -227551,
+  "eta_at": 1791308730000
+ }
+]

@@ -1,0 +1,50 @@
+[
+ {
+  "estimated_arrival": null,
+  "estimated_arrival_unix": null,
+  "headsign": "Escola Secundária Mem Martins",
+  "line_id": "1203",
+  "observed_arrival": null,
+  "observed_arrival_unix": null,
+  "pattern_id": "[LA77N]1203_0_3",
+  "related_trip_ids": null,
+  "route_id": "[LA77N]1203_0",
+  "scheduled_arrival": "05:54:00",
+  "scheduled_arrival_unix": 1791521640,
+  "stop_sequence": 36,
+  "trip_id": null,
+  "vehicle_id": null
+ },
+ {
+  "estimated_arrival": null,
+  "estimated_arrival_unix": null,
+  "headsign": "Escola Secundária Mem Martins",
+  "line_id": "1203",
+  "observed_arrival": null,
+  "observed_arrival_unix": null,
+  "pattern_id": "[LA77N]1203_0_3",
+  "related_trip_ids": null,
+  "route_id": "[LA77N]1203_0",
+  "scheduled_arrival": "06:37:00",
+  "scheduled_arrival_unix": 1791524220,
+  "stop_sequence": 36,
+  "trip_id": null,
+  "vehicle_id": null
+ },
+ {
+  "estimated_arrival": null,
+  "estimated_arrival_unix": null,
+  "headsign": "Mira Sintra (Junta Freguesia)",
+  "line_id": "1234",
+  "observed_arrival": null,
+  "observed_arrival_unix": null,
+  "pattern_id": "[LA77N]1234_0_1",
+  "related_trip_ids": null,
+  "route_id": "[LA77N]1234_0",
+  "scheduled_arrival": "06:52:00",
+  "scheduled_arrival_unix": 1791525120,
+  "stop_sequence": 62,
+  "trip_id": null,
+  "vehicle_id": null
+ }
+]
