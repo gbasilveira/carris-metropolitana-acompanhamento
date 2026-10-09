@@ -29,6 +29,7 @@ export interface Pattern {
   short_name: string;
   headsign: string;
   direction_id: number;
+  route_id: string;
   shape_id: string;
   color: string;
   text_color: string;

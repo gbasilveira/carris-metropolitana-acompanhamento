@@ -4,11 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "npm run copy-worker && vite",
+    "build": "npm run copy-worker && tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "server": "node --experimental-strip-types server/index.ts"
+    "server": "node --experimental-strip-types server/index.ts",
+    "copy-worker": "mkdir -p public/maplibre && cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs node_modules/maplibre-gl/dist/maplibre-gl-shared.mjs public/maplibre/",
+    "postinstall": "npm run copy-worker"
   },
   "dependencies": {
     "maplibre-gl": "^6.13.0",
