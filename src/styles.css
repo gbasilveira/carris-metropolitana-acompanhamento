@@ -31,3 +31,13 @@ button.btn:disabled { opacity: .5; }
 .chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
 .chip { display:flex; align-items:center; gap:6px; border:1px solid var(--bd); border-radius:16px; padding:3px 4px 3px 4px; font-size:13px; }
 .chip button { background:none; border:0; color:var(--mut); font-size:16px; padding:0 4px; }
+/* Etiquetas de veículo ao estilo painel de controlo aéreo */
+.tag { position: relative; pointer-events: none; background: #0b1620ee; color: #9bffb5; font: 11px/1.25 ui-monospace, "SF Mono", Menlo, Consolas, monospace; border: 1px solid var(--c); border-left-width: 4px; padding: 2px 6px; white-space: nowrap; border-radius: 2px; box-shadow: 0 1px 4px #0008; }
+.tag b { color: #fff; font-size: 12px; }
+.tag::before { content: ""; position: absolute; left: -10px; bottom: -7px; width: 14px; height: 1px; background: var(--c); transform: rotate(-40deg); transform-origin: left bottom; }
+.tag.stale { color: #ffc266; border-style: dashed; }
+.dense .tag { display: none; }
+.line-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.pchip { border: 1px solid var(--bd); border-radius: 14px; padding: 4px 10px; font-size: 12.5px; background: var(--bg); color: var(--fg); }
+.pchip.on { color: #fff; border-color: transparent; }
+.pchip.dash { border-style: dashed; }
