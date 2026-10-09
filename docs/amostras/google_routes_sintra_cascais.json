@@ -1,0 +1,1048 @@
+{
+  "routes": [
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Portela de Sintra (Estação) P10 Entrada Sul",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.802140000000009,
+                        "longitude": -9.3766299999999987
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:12:00Z",
+                  "departureStop": {
+                    "name": "Largo Virgílio Horta Ft Câm Mun Sintra",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.798521,
+                        "longitude": -9.388035
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:07:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:12"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:07"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Portela de Sintra (Estação) P10 Entrada Sul",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Portela Sintra (Estação Sul) via Ranholas | Circular",
+                  "color": "#3d85c6",
+                  "nameShort": "1252",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 6
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Cascais (Terminal)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70196,
+                        "longitude": -9.41894
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:52:00Z",
+                  "departureStop": {
+                    "name": "Portela de Sintra (Estação) P9 Entrada Sul",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.80213,
+                        "longitude": -9.37699
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:20:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:52"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:20"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Portela de Sintra (Estação Sul) | via Cascaishopping (Terminal)",
+                  "color": "#c61d23",
+                  "nameShort": "1621",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 2
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Av Mov Forças Armadas Frente Smas",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.800190000000008,
+                        "longitude": -9.380604
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:10:00Z",
+                  "departureStop": {
+                    "name": "Largo Virgílio Horta Ft Câm Mun Sintra",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.798521,
+                        "longitude": -9.388035
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:07:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:10"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:07"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Portela de Sintra (Estação) P10 Entrada Sul",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Portela Sintra (Estação Sul) via Ranholas | Circular",
+                  "color": "#3d85c6",
+                  "nameShort": "1252",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 3
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Av Sintra Fte Jumbo",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70221,
+                        "longitude": -9.4178699999999989
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:56:00Z",
+                  "departureStop": {
+                    "name": "Av Mov Forças Armadas Frente Smas",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.800261,
+                        "longitude": -9.380764
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:16:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:56"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:16"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Portela Sintra (Estação Sul) via Alvide",
+                  "color": "#c61d23",
+                  "nameShort": "1623",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 41
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Av Sintra Fte Jumbo",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70221,
+                        "longitude": -9.4178699999999989
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:56:00Z",
+                  "departureStop": {
+                    "name": "Av Francisco Almeida (X) Largo Morais",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.798829999999995,
+                        "longitude": -9.38142
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:17:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:56"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:17"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Portela Sintra (Estação Sul) via Alvide",
+                  "color": "#c61d23",
+                  "nameShort": "1623",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 40
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Chão de Meninos",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.791564799999996,
+                        "longitude": -9.3739751
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:13:00Z",
+                  "departureStop": {
+                    "name": "Estação de Sintra",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.799220399999996,
+                        "longitude": -9.385759
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:10:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:13"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:10"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Sintra 434 Circular",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Sintra 434",
+                      "uri": "https://www.sintra434.com/"
+                    }
+                  ],
+                  "name": "Sintra 434 Circular",
+                  "nameShort": "434",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 2
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Av Sintra Fte Jumbo",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70221,
+                        "longitude": -9.4178699999999989
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:56:00Z",
+                  "departureStop": {
+                    "name": "São Pedro Sintra (Chão Meninos)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.791570000000007,
+                        "longitude": -9.3739499999999989
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:20:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:56"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:20"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Portela Sintra (Estação Sul) via Alvide",
+                  "color": "#c61d23",
+                  "nameShort": "1623",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 36
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "R das Fisgas (Fte Hiper Cascais)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.742107,
+                        "longitude": -9.3934
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:43:00Z",
+                  "departureStop": {
+                    "name": "Av Francisco Almeida (X) Largo Morais",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.798829999999995,
+                        "longitude": -9.38142
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:27:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:43"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:27"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Estoril (Estação)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Estoril (Estação) - Portela Sintra (Estação Sul)",
+                  "color": "#c61d23",
+                  "nameShort": "1629",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 16
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Cascais (Terminal)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70196,
+                        "longitude": -9.41894
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T09:12:00Z",
+                  "departureStop": {
+                    "name": "R das Fisgas (Fte Hiper Cascais)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.742107,
+                        "longitude": -9.3934
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:49:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "10:12"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:49"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Rio de Mouro (Estação Sul)",
+                  "color": "#c61d23",
+                  "nameShort": "1639",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 6
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Chão de Meninos",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.791564799999996,
+                        "longitude": -9.3739751
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:23:00Z",
+                  "departureStop": {
+                    "name": "Estação de Sintra",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.799220399999996,
+                        "longitude": -9.385759
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:20:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:23"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:20"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Sintra 434 Circular",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Sintra 434",
+                      "uri": "https://www.sintra434.com/"
+                    }
+                  ],
+                  "name": "Sintra 434 Circular",
+                  "nameShort": "434",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 2
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "R das Fisgas (Fte Hiper Cascais)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.742107,
+                        "longitude": -9.3934
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T08:43:00Z",
+                  "departureStop": {
+                    "name": "São Pedro Sintra (Chão Meninos)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.791570000000007,
+                        "longitude": -9.3739499999999989
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:30:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "09:43"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:30"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Estoril (Estação)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Estoril (Estação) - Portela Sintra (Estação Sul)",
+                  "color": "#c61d23",
+                  "nameShort": "1629",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 12
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "transitDetails": {
+                "stopDetails": {
+                  "arrivalStop": {
+                    "name": "Cascais (Terminal)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.70196,
+                        "longitude": -9.41894
+                      }
+                    }
+                  },
+                  "arrivalTime": "2026-10-12T09:12:00Z",
+                  "departureStop": {
+                    "name": "R das Fisgas (Fte Hiper Cascais)",
+                    "location": {
+                      "latLng": {
+                        "latitude": 38.742107,
+                        "longitude": -9.3934
+                      }
+                    }
+                  },
+                  "departureTime": "2026-10-12T08:49:00Z"
+                },
+                "localizedValues": {
+                  "arrivalTime": {
+                    "time": {
+                      "text": "10:12"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  },
+                  "departureTime": {
+                    "time": {
+                      "text": "09:49"
+                    },
+                    "timeZone": "Europe/Lisbon"
+                  }
+                },
+                "headsign": "Cascais (Terminal)",
+                "transitLine": {
+                  "agencies": [
+                    {
+                      "name": "Carris Metropolitana - Viação Alvorada",
+                      "phoneNumber": "+351 21 041 0400",
+                      "uri": "https://carrismetropolitana.pt/"
+                    }
+                  ],
+                  "name": "Cascais (Terminal) - Rio de Mouro (Estação Sul)",
+                  "color": "#c61d23",
+                  "nameShort": "1639",
+                  "textColor": "#ffffff",
+                  "vehicle": {
+                    "name": {
+                      "text": "Autocarro"
+                    },
+                    "type": "BUS",
+                    "iconUri": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png"
+                  }
+                },
+                "stopCount": 6
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            },
+            {
+              "travelMode": "WALK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
