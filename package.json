@@ -1,0 +1,29 @@
+{
+  "name": "carris-acompanhamento",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run copy-worker && vite",
+    "build": "npm run copy-worker && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "server": "node --experimental-strip-types server/index.ts",
+    "copy-worker": "mkdir -p public/maplibre && cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs node_modules/maplibre-gl/dist/maplibre-gl-shared.mjs public/maplibre/",
+    "postinstall": "npm run copy-worker"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.13.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}
