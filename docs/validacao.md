@@ -58,13 +58,25 @@ Foi uma medição de um só momento. Repetir ao longo de um dia, incluindo hora 
 | Lotação | — | **Não**, campos vazios |
 | Alertas | `/v2/alerts` | **Sim** |
 
-## 6. Google Maps (inferência, por validar)
-- A rota de transportes públicos (Directions/Routes API, modo `transit`) devolve, por troço, `line.short_name`, `headsign`, agência, paragem de partida e chegada (nome e coordenadas) e número de paragens.
-- Ligação à Carris: `line.short_name` ↔ `line_id`/`short_name`; paragem de embarque por coordenadas contra `/v2/stops` (raio ~50 m) e nome; sentido por `headsign` ↔ `pattern.headsign`.
-- Riscos: nomes não coincidem exatamente; várias linhas com o mesmo número em municípios diferentes; custo e termos de uso da API (a Routes API é paga acima de uma quota; os termos do Google limitam a sobreposição de dados fora do mapa Google).
-- A abordagem a testar: o utilizador escolhe o percurso (Google), a app extrai as linhas Carris do troço e acompanha só esses veículos.
+## 6. Google Maps — testado (Routes API, `travelMode: TRANSIT`, 2026-10-09)
+12 pares origem/destino na Área Metropolitana de Lisboa (Sintra→Cascais, Amadora→Oeiras, Almada→Setúbal, Loures→Odivelas, Seixal→Barreiro, Mafra→Ericeira, Montijo→Alcochete, Sesimbra→Setúbal, Vila Franca→Alverca, Queluz→Sintra, Palmela→Pinhal Novo, Cacém→Amadora), com alternativas (6 rotas por par). Campos usados: `transitDetails` (`transitLine.nameShort`, `transitLine.agencies`, `headsign`, `stopDetails.departureStop/arrivalStop` com nome e coordenadas).
+
+Resultado, sobre 127 troços de transporte público:
+- 94 (74 %) são da Carris Metropolitana. Os restantes: CP (20), Fertagus (4), TCB (4), Metro Sul (2), Sintra 434 (2), outros (1). A agência identifica-se pelo nome (`Carris Metropolitana`).
+- **Linha:** 94/94 (100 %) — `nameShort` coincide com `short_name` da Carris, sem ambiguidades (1 linha por número).
+- **Paragens:** 94/94 (100 %) a ≤ 50 m da paragem Carris mais próxima, tanto no embarque como no desembarque (medianas ~1 m, máximo 25 m).
+- **Padrão (linha + sentido):** 92/94 (98 %) resolvidos como o padrão que contém embarque antes de desembarque. Dois falharam (1252, 3113).
+- **Destino (`headsign`):** 75/94 (80 %) coincidem com ≥ 50 % de palavras com o `headsign` do padrão. Os restantes têm nomes diferentes (ex.: Google "Lisboa (Campo Grande) via Cabeço de Montachique" vs. Carris "Campo Grande"), mas o padrão correto é identificável por embarque/desembarque.
+
+Limitações:
+- Medição única, com 12 pares só em zonas urbanas e suburbanas; repetir com mais pares e horas.
+- Quando duas linhas passam pelos mesmos pares de paragens, o desempate por `headsign` é fraco; 2 casos sem padrão e vários com pontuação baixa devem ser tratados na app com a escolha do utilizador.
+- Os dados de horário do Google vêm do GTFS da Carris, por isso a ligação é coerente. Não se testou o preço por pedido; a Routes API com transporte público é paga acima de uma quota.
+- O mapa do Google tem termos de uso: os dados da Carris só podem ser sobrepostos num mapa Google conforme esses termos. Rever antes de publicar; alternativa: MapLibre com tiles próprios.
+
+Algoritmo de ligação validado: (1) filtrar troços com agência "Carris Metropolitana"; (2) `nameShort` → `line_id`; (3) paragens Carris a ≤ 120 m do embarque e do desembarque; (4) escolher o padrão da linha que contém embarque antes de desembarque, desempatando pelo `headsign`; (5) seguir no hub os veículos com esse `pattern_id`.
 
 ## 7. Próximos passos propostos
 1. Medir durante um dia a idade das posições e a fiabilidade das ETA, para confirmar se a falha do ETA é pontual.
-2. Com uma chave Google: testar 10 percursos reais e medir a taxa de correspondência linha/paragem.
+2. Repetir o teste Google com mais pares, horas e zonas rurais.
 3. Esboçar a PWA (React + MapLibre ou Google Maps JS) com cache offline do GTFS/paragens/padrões e polling das posições.
