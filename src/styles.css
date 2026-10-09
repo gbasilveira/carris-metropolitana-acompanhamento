@@ -41,3 +41,14 @@ button.btn:disabled { opacity: .5; }
 .pchip { border: 1px solid var(--bd); border-radius: 14px; padding: 4px 10px; font-size: 12.5px; background: var(--bg); color: var(--fg); }
 .pchip.on { color: #fff; border-color: transparent; }
 .pchip.dash { border-style: dashed; }
+.sheet-head { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 2px 8px 0; position: relative; }
+.sheet-head .grab { margin: 6px 0 2px; flex: 0 0 44px; }
+.sheet-head .ibtn { position: absolute; top: 2px; background: none; border: 0; font-size: 18px; padding: 2px 8px; color: var(--mut); }
+.sheet-head .ibtn:nth-of-type(2) { right: 6px; }
+.sheet-head .ibtn:nth-of-type(3) { right: 46px; }
+.sheet.split { max-height: 52vh; }
+.sheet.panel { top: 0; max-height: none; border-radius: 0; padding-top: env(safe-area-inset-top); }
+.sheet.map { display: none; }
+.fab { position: fixed; right: 12px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 6; width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--red); color: #fff; font-size: 22px; box-shadow: 0 2px 8px #0006; }
+.opt { border: 1px solid var(--bd); border-radius: 10px; padding: 6px 8px; margin: 6px 0; }
+h4 { margin: 14px 0 4px; font-size: 14px; }

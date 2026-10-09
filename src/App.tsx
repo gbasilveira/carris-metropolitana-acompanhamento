@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MapView, type MapShape, type MapStop, type MapVehicle } from "./MapView.tsx";
 import { getAlerts, getArrivals, getLines, getPattern, getShape, getStops, getVehicles, googleRoutes, lisbonDate } from "./lib/api.ts";
 import { buildGeometry, estimateEta, formatEta, SpeedTracker, type PatternGeometry } from "./lib/eta.ts";
-import { loadFavorites, saveFavorites, toggle } from "./lib/favorites.ts";
-import { carrisSteps, matchLeg, type LegMatch } from "./lib/match.ts";
+import { loadFavorites, saveFavorites, toggle, type Favorites } from "./lib/favorites.ts";
+import { mergeOptions, newId, optionsFromRoutes, searchTimes, tripLineIds, tripPatternIds, type Group, type Trip, type TripOption } from "./lib/trips.ts";
 import { stripAgency, type Alert, type Arrival, type HubVehicle, type Line, type Pattern, type Stop } from "./lib/types.ts";
 
 const POLL_MS = 7000;
@@ -24,7 +24,8 @@ const txt = (t?: { translation: { text: string }[] }) => t?.translation?.[0]?.te
 
 export function App() {
   const [tab, setTab] = useState<Tab>("linhas");
-  const [min, setMin] = useState(false);
+  const [view, setView] = useState<"min" | "split" | "panel" | "map">("split");
+  const setMin = (m: boolean) => setView((v) => (m ? "min" : v === "panel" ? v : "split"));
   const [lines, setLines] = useState<Line[]>([]);
   const [stops, setStops] = useState<Stop[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -39,7 +40,7 @@ export function App() {
   const [vehicles, setVehicles] = useState<HubVehicle[]>([]);
   const [fetchedAt, setFetchedAt] = useState(0);
   const [now, setNow] = useState(Date.now());
-  const [favs, setFavs] = useState(loadFavorites);
+  const [favs, setFavs] = useState<Favorites>(loadFavorites);
   const [stopId, setStopId] = useState<string | null>(null);
   const tracker = useRef(new SpeedTracker());
 
@@ -141,6 +142,21 @@ export function App() {
     }
   };
 
+  const ensureLine = async (line: Line) => {
+    if (!followed.some((l) => l.id === line.id)) await toggleLine(line);
+  };
+  const followTrip = async (t: { options: TripOption[] }) => {
+    const ids = new Set(t.options.flatMap((o) => o.legs.map((l) => l.lineId)));
+    await Promise.all(
+      t.options.flatMap((o) => o.legs).flatMap((leg) => {
+        const line = lines.find((l) => l.id === leg.lineId);
+        return line ? leg.patternIds.map((pid) => followPattern(line, pid)) : [];
+      }),
+    );
+    if (ids.size) setFitKey("trip" + Date.now());
+  };
+  const followGroup = (g: Group) => Promise.all(g.lineIds.map((id) => lines.find((l) => l.id === id)).filter(Boolean).map((l) => ensureLine(l as Line)));
+
   const mapShapes: MapShape[] = useMemo(() => sel.map((s) => ({ id: s.pattern.id, color: s.color, dash: s.dash, coords: s.geom.coords })), [selKey]);
   const mapStops: MapStop[] = useMemo(() => {
     const seen = new Set<string>();
@@ -190,8 +206,15 @@ export function App() {
           {vehicles.length} veículos · dado mais recente há {newestAge} s{oldestAge > 120 ? ` (mais antigo ${oldestAge} s)` : ""}
         </div>
       )}
-      <div className={`sheet${min ? " min" : ""}`}>
-        <button className="grab" aria-label="Expandir/recolher" onClick={() => setMin(!min)} />
+      {view === "map" && (
+        <button className="fab" aria-label="Mostrar painel" onClick={() => setView("split")}>☰</button>
+      )}
+      <div className={`sheet ${view}`}>
+        <div className="sheet-head">
+          <button className="grab" aria-label="Expandir/recolher" onClick={() => setView(view === "min" ? "split" : "min")} />
+          <button className="ibtn" aria-label={view === "panel" ? "Reduzir painel" : "Painel em ecrã inteiro"} onClick={() => setView(view === "panel" ? "split" : "panel")}>{view === "panel" ? "⤓" : "⤢"}</button>
+          <button className="ibtn" aria-label="Mapa em ecrã inteiro" onClick={() => setView("map")}>🗺</button>
+        </div>
         <div className="tabs">
           {(["linhas", "paragem", "alertas", "favoritos", "google"] as Tab[]).map((t) => (
             <button key={t} className={tab === t ? "on" : ""} onClick={() => (setTab(t), setMin(false))}>
@@ -202,7 +225,7 @@ export function App() {
         <div className="body">
           {loadErr && <div className="err">{loadErr}</div>}
           {tab === "linhas" && (
-            <LinesPanel lines={lines} query={query} setQuery={setQuery} sel={sel} followed={followed} available={available} favs={favs.lines} toggleLine={toggleLine} togglePattern={togglePattern}
+            <LinesPanel groups={favs.groups} saveGroup={(name) => setFavs((f) => ({ ...f, groups: [...f.groups, { id: newId(), name, lineIds: followed.map((l) => l.id) }] }))} lines={lines} query={query} setQuery={setQuery} sel={sel} followed={followed} available={available} favs={favs.lines} toggleLine={toggleLine} togglePattern={togglePattern}
               toggleFav={(id) => setFavs((f) => ({ ...f, lines: toggle(f.lines, id) }))} />
           )}
           {tab === "paragem" && (
@@ -211,11 +234,11 @@ export function App() {
           )}
           {tab === "alertas" && <AlertsPanel alerts={alerts} sel={sel} />}
           {tab === "favoritos" && (
-            <FavsPanel lines={lines} stopById={stopById} favs={favs} followed={followed} openLine={toggleLine} openStop={openStop} />
+            <FavsPanel lines={lines} stopById={stopById} favs={favs} setFavs={setFavs} followed={followed} sel={sel} openLine={toggleLine} openStop={openStop} followTrip={followTrip} followGroup={followGroup} unfollow={removePattern} />
           )}
           {tab === "google" && (
             <GooglePanel lines={lines} stops={stops} gPick={gPick} setGPick={(p) => (setGPick(p), p && setMin(true))} gOrigin={gOrigin} gDest={gDest}
-              sel={sel} follow={followPattern} unfollow={removePattern} />
+              sel={sel} stopById={stopById} categories={favs.categories} setFavs={setFavs} follow={followPattern} unfollow={removePattern} followTrip={followTrip} />
           )}
         </div>
       </div>
@@ -228,6 +251,7 @@ function Badge({ line }: { line: Line }) {
 }
 
 function LinesPanel(p: {
+  groups: Group[]; saveGroup: (name: string) => void;
   lines: Line[]; query: string; setQuery: (q: string) => void; sel: Sel[]; followed: Line[]; available: Record<string, Pattern[]>; favs: string[];
   toggleLine: (l: Line) => void; togglePattern: (l: Line, pattern: Pattern) => void; toggleFav: (id: string) => void;
 }) {
@@ -258,6 +282,7 @@ function LinesPanel(p: {
           </div>
         );
       })}
+      {p.followed.length > 1 && <SaveGroup onSave={p.saveGroup} />}
       <input placeholder="Procurar linha (nº ou localidade)" value={p.query} onChange={(e) => p.setQuery(e.target.value)} inputMode="search" />
       {results.map((l) => (
         <div className="row" key={l.id}>
@@ -340,46 +365,200 @@ function AlertsPanel({ alerts, sel }: { alerts: Alert[]; sel: Sel[] }) {
   );
 }
 
-function FavsPanel({ lines, stopById, favs, followed, openLine, openStop }: {
-  lines: Line[]; stopById: Map<string, Stop>; favs: { lines: string[]; stops: string[] }; followed: Line[]; openLine: (l: Line) => void; openStop: (id: string) => void;
+function SaveGroup({ onSave }: { onSave: (name: string) => void }) {
+  const [name, setName] = useState("");
+  return (
+    <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+      <input style={{ margin: 0 }} placeholder="Guardar linhas seguidas como grupo…" value={name} onChange={(e) => setName(e.target.value)} />
+      <button className="btn" disabled={!name.trim()} onClick={() => (onSave(name.trim()), setName(""))}>Guardar</button>
+    </div>
+  );
+}
+
+function OptionView({ option, lines, stopById, sel, onFollow, onUnfollow, showDepartures }: {
+  option: TripOption; lines: Line[]; stopById: Map<string, Stop>; sel: Sel[]; onFollow: () => void; onUnfollow: () => void; showDepartures: boolean;
+}) {
+  const on = option.legs.every((l) => l.patternIds.every((p) => sel.some((s) => s.pattern.id === p)));
+  const first = option.legs[0];
+  const [deps, setDeps] = useState<number[] | null>(null);
+  useEffect(() => {
+    if (!showDepartures) return;
+    let live = true;
+    getArrivals(first.boardStopId, lisbonDate())
+      .then((a) => {
+        if (!live) return;
+        const nowS = Date.now() / 1000;
+        const ids = new Set(first.patternIds);
+        setDeps(a.filter((x) => ids.has(stripAgency(x.pattern_id)) && x.scheduled_arrival_unix >= nowS).map((x) => x.scheduled_arrival_unix).sort((x, y) => x - y).slice(0, 4));
+      })
+      .catch(() => live && setDeps([]));
+    return () => { live = false; };
+  }, [showDepartures, first.boardStopId, first.patternIds.join()]);
+  return (
+    <div className="opt">
+      {option.legs.map((leg, i) => {
+        const line = lines.find((l) => l.id === leg.lineId);
+        return (
+          <div className="row" key={i} style={{ borderBottom: 0 }}>
+            {line ? <Badge line={line} /> : <span className="badge">{leg.lineId}</span>}
+            <div className="grow">{stopById.get(leg.boardStopId)?.long_name ?? leg.boardStopId} → {stopById.get(leg.alightStopId)?.long_name ?? leg.alightStopId}</div>
+          </div>
+        );
+      })}
+      {option.partial && <div className="mut">Inclui outros operadores (só se segue a parte Carris).</div>}
+      {showDepartures && (
+        <div className="mut">
+          {deps === null ? "A obter horários…" : deps.length ? `Próximas partidas (previstas): ${deps.map(fmtTime).join(" · ")}` : "Sem mais partidas previstas hoje neste percurso."}
+        </div>
+      )}
+      <button className={`btn${on ? " sec" : ""}`} style={{ marginTop: 4 }} onClick={on ? onUnfollow : onFollow}>{on ? "A seguir ✓" : "Seguir esta opção"}</button>
+    </div>
+  );
+}
+
+function TripCard({ trip, lines, stopById, sel, onFollowAll, onFollow, onUnfollow, onDelete, onCategory, categories }: {
+  trip: Trip; lines: Line[]; stopById: Map<string, Stop>; sel: Sel[]; categories: string[];
+  onFollowAll: () => void; onFollow: (o: TripOption) => void; onUnfollow: (o: TripOption) => void; onDelete: () => void; onCategory: (c: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderBottom: "1px solid var(--bd)", padding: "6px 0" }}>
+      <div className="row" style={{ borderBottom: 0 }}>
+        <div className="grow" onClick={() => setOpen(!open)}>
+          <b>{trip.name}</b>
+          <div className="mut">{trip.options.length} opç{trip.options.length === 1 ? "ão" : "ões"} · {trip.time ? `partida ${trip.time}` : "todas as horas"} · {tripLineIds(trip).join(", ")}</div>
+        </div>
+        <button className="btn" onClick={onFollowAll}>Seguir</button>
+      </div>
+      {open && (
+        <>
+          {trip.options.map((o, i) => (
+            <OptionView key={i} option={o} lines={lines} stopById={stopById} sel={sel} showDepartures onFollow={() => onFollow(o)} onUnfollow={() => onUnfollow(o)} />
+          ))}
+          <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+            <select style={{ margin: 0 }} value={trip.category} onChange={(e) => onCategory(e.target.value)} aria-label="Categoria">
+              {categories.map((c) => <option key={c}>{c}</option>)}
+            </select>
+            <button className="btn sec" onClick={() => confirm(`Apagar “${trip.name}”?`) && onDelete()}>Apagar</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function FavsPanel({ lines, stopById, favs, setFavs, followed, sel, openLine, openStop, followTrip, followGroup, unfollow }: {
+  lines: Line[]; stopById: Map<string, Stop>; favs: Favorites; setFavs: (f: (f: Favorites) => Favorites) => void; followed: Line[]; sel: Sel[];
+  openLine: (l: Line) => void; openStop: (id: string) => void; followTrip: (t: { options: TripOption[] }) => void; followGroup: (g: Group) => void; unfollow: (patternId: string) => void;
 }) {
   const fl = lines.filter((l) => favs.lines.includes(l.id));
   const fs = favs.stops.map((id) => stopById.get(id)).filter(Boolean) as Stop[];
-  if (!fl.length && !fs.length) return <p className="mut">Sem favoritos. Toque em ★ numa linha ou paragem.</p>;
+  const [newGroup, setNewGroup] = useState("");
+  const [addTo, setAddTo] = useState<string | null>(null);
+  const [q, setQ] = useState("");
+  const tripsBy = (c: string) => favs.trips.filter((t) => t.category === c);
+  const cats = [...new Set([...favs.categories, ...favs.trips.map((t) => t.category)])];
+  const upd = (t: Trip) => setFavs((f) => ({ ...f, trips: f.trips.map((x) => (x.id === t.id ? t : x)) }));
+  const pats = (o: TripOption) => o.legs.flatMap((l) => l.patternIds);
+
   return (
     <>
+      <h4>Viagens</h4>
+      {favs.trips.length === 0 && <p className="mut">Sem viagens guardadas. Faça uma pesquisa em “Viagem” e toque em “Guardar viagem”.</p>}
+      {cats.map((c) => tripsBy(c).length > 0 && (
+        <div key={c}>
+          <div className="mut" style={{ textTransform: "uppercase", letterSpacing: ".04em", marginTop: 6 }}>{c}</div>
+          {tripsBy(c).map((t) => (
+            <TripCard key={t.id} trip={t} lines={lines} stopById={stopById} sel={sel} categories={cats}
+              onFollowAll={() => followTrip(t)} onFollow={(o) => followTrip({ options: [o] })}
+              onUnfollow={(o) => pats(o).forEach(unfollow)}
+              onDelete={() => setFavs((f) => ({ ...f, trips: f.trips.filter((x) => x.id !== t.id) }))}
+              onCategory={(cat) => upd({ ...t, category: cat })} />
+          ))}
+        </div>
+      ))}
+      <button className="btn sec" style={{ marginTop: 6 }} onClick={() => {
+        const n = prompt("Nome da nova categoria de percursos");
+        if (n?.trim()) setFavs((f) => ({ ...f, categories: [...new Set([...f.categories, n.trim()])] }));
+      }}>+ Categoria</button>
+
+      <h4>Grupos de carreiras</h4>
+      {favs.groups.map((g) => (
+        <div key={g.id} style={{ borderBottom: "1px solid var(--bd)", padding: "6px 0" }}>
+          <div className="row" style={{ borderBottom: 0 }}>
+            <div className="grow"><b>{g.name}</b>
+              <div className="line-chips">
+                {g.lineIds.map((id) => {
+                  const l = lines.find((x) => x.id === id);
+                  return l ? (
+                    <span className="chip" key={id}><Badge line={l} /><button aria-label="Remover linha do grupo" onClick={() => setFavs((f) => ({ ...f, groups: f.groups.map((x) => (x.id === g.id ? { ...x, lineIds: x.lineIds.filter((y) => y !== id) } : x)) }))}>✕</button></span>
+                  ) : null;
+                })}
+              </div>
+            </div>
+            <button className="btn" onClick={() => followGroup(g)}>Seguir</button>
+            <button className="star" aria-label="Apagar grupo" onClick={() => confirm(`Apagar o grupo “${g.name}”?`) && setFavs((f) => ({ ...f, groups: f.groups.filter((x) => x.id !== g.id) }))}>🗑</button>
+          </div>
+          {addTo === g.id ? (
+            <>
+              <input placeholder="Linha a adicionar" value={q} onChange={(e) => setQ(e.target.value)} inputMode="search" />
+              {q.trim() && lines.filter((l) => l.short_name.startsWith(q.trim())).slice(0, 6).map((l) => (
+                <div className="row" key={l.id} onClick={() => (setFavs((f) => ({ ...f, groups: f.groups.map((x) => (x.id === g.id && !x.lineIds.includes(l.id) ? { ...x, lineIds: [...x.lineIds, l.id] } : x)) })), setQ(""), setAddTo(null))}>
+                  <Badge line={l} /><div className="grow">{l.long_name}</div>
+                </div>
+              ))}
+            </>
+          ) : <button className="btn sec" onClick={() => (setAddTo(g.id), setQ(""))}>+ Linha</button>}
+        </div>
+      ))}
+      <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+        <input style={{ margin: 0 }} placeholder="Novo grupo (vazio ou com as linhas seguidas)" value={newGroup} onChange={(e) => setNewGroup(e.target.value)} />
+        <button className="btn" disabled={!newGroup.trim()} onClick={() => (setFavs((f) => ({ ...f, groups: [...f.groups, { id: newId(), name: newGroup.trim(), lineIds: followed.map((l) => l.id) }] })), setNewGroup(""))}>Criar</button>
+      </div>
+
+      <h4>Linhas e paragens</h4>
+      {!fl.length && !fs.length && <p className="mut">Toque em ★ numa linha ou paragem.</p>}
       {fl.map((l) => <div className="row" key={l.id} onClick={() => openLine(l)}><Badge line={l} /><div className="grow">{l.long_name}<div className="mut">{followed.some((f) => f.id === l.id) ? "A seguir ✓" : "Toque para seguir"}</div></div></div>)}
       {fs.map((s) => <div className="row" key={s.id} onClick={() => openStop(s.id)}><span>🚏</span><div className="grow">{s.long_name}<div className="mut">{s.id}</div></div></div>)}
     </>
   );
 }
 
-function GooglePanel({ lines, stops, gPick, setGPick, gOrigin, gDest, sel, follow, unfollow }: {
+function GooglePanel({ lines, stops, gPick, setGPick, gOrigin, gDest, sel, stopById, categories, setFavs, follow, unfollow, followTrip }: {
   lines: Line[]; stops: Stop[]; gPick: "origin" | "destination" | null; setGPick: (p: "origin" | "destination" | null) => void;
-  gOrigin?: [number, number]; gDest?: [number, number]; sel: Sel[]; follow: (line: Line, patternId: string) => void; unfollow: (patternId: string) => void;
+  gOrigin?: [number, number]; gDest?: [number, number]; sel: Sel[]; stopById: Map<string, Stop>; categories: string[];
+  setFavs: (f: (f: Favorites) => Favorites) => void;
+  follow: (line: Line, patternId: string) => void; unfollow: (patternId: string) => void; followTrip: (t: { options: TripOption[] }) => void;
 }) {
   const [when, setWhen] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [matches, setMatches] = useState<LegMatch[]>();
+  const [options, setOptions] = useState<TripOption[]>();
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState(categories[0] ?? "Outros");
+  const [saved, setSaved] = useState(false);
 
   const search = async () => {
     if (!gOrigin || !gDest) return;
-    setBusy(true); setErr(""); setMatches(undefined);
+    setBusy(true); setErr(""); setOptions(undefined); setSaved(false);
     try {
-      const res = await googleRoutes({ lat: gOrigin[1], lon: gOrigin[0] }, { lat: gDest[1], lon: gDest[0] }, when ? new Date(when).toISOString() : undefined);
-      const out: LegMatch[] = [];
-      const seen = new Set<string>();
-      for (const r of res.routes ?? []) for (const st of carrisSteps(r)) {
-        const line = lines.find((l) => l.short_name === st.transitDetails.transitLine.nameShort);
-        if (!line) continue;
-        const pats = (await Promise.all(line.pattern_ids.map((id) => getPattern(id).catch(() => null)))).filter(Boolean) as Pattern[];
-        const m = matchLeg(st, lines, stops, pats);
-        const key = line.id + m.candidates.map((c) => c.pattern_id).join();
-        if (!seen.has(key)) (seen.add(key), out.push(m));
-      }
-      setMatches(out);
-      if (!out.length) setErr("Nenhum troço da Carris Metropolitana nas rotas devolvidas pelo Google.");
+      // sem hora: cobre o dia (5 horas num dia útil + domingo) para listar todas as opções válidas do percurso
+      const times = when ? [new Date(when).toISOString()] : searchTimes();
+      const settled = await Promise.allSettled(times.map((t) => googleRoutes({ lat: gOrigin[1], lon: gOrigin[0] }, { lat: gDest[1], lon: gDest[0] }, t)));
+      const ok = settled.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+      if (!ok.length) throw (settled[0] as PromiseRejectedResult).reason;
+      const cache = new Map<string, Promise<Pattern[]>>();
+      const patternsFor = (line: Line) => {
+        let p = cache.get(line.id);
+        if (!p) (p = Promise.all(line.pattern_ids.map((id) => getPattern(id).catch(() => null))).then((r) => r.filter(Boolean) as Pattern[]), cache.set(line.id, p));
+        return p;
+      };
+      const opts = (await Promise.all(ok.map((r) => optionsFromRoutes([r], lines, stops, patternsFor)))).reduce(mergeOptions, [] as TripOption[]);
+      setOptions(opts);
+      const f = opts[0]?.legs[0], l = opts[0]?.legs[opts[0].legs.length - 1];
+      setName(f && l ? `${stopById.get(f.boardStopId)?.long_name ?? "Origem"} → ${stopById.get(l.alightStopId)?.long_name ?? "Destino"}` : "");
+      if (!opts.length) setErr("Nenhuma opção totalmente identificável na rede Carris Metropolitana para este percurso.");
+      else if (ok.length < times.length) setErr(`${times.length - ok.length} de ${times.length} pesquisas falharam; podem faltar opções.`);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
@@ -387,6 +566,19 @@ function GooglePanel({ lines, stops, gPick, setGPick, gOrigin, gDest, sel, follo
     }
   };
 
+  const save = () => {
+    if (!options || !gOrigin || !gDest) return;
+    const hhmm = when ? when.slice(11, 16) : undefined;
+    const trip: Trip = {
+      id: newId(), name: name.trim() || "Viagem", category,
+      origin: { lat: gOrigin[1], lon: gOrigin[0] }, destination: { lat: gDest[1], lon: gDest[0] },
+      time: hhmm, options,
+    };
+    setFavs((f) => ({ ...f, trips: [...f.trips, trip] }));
+    setSaved(true);
+  };
+
+  const lineOf = (id: string) => lines.find((l) => l.id === id);
   return (
     <>
       <div className="chips">
@@ -394,29 +586,25 @@ function GooglePanel({ lines, stops, gPick, setGPick, gOrigin, gDest, sel, follo
         <button className={`btn${gPick === "destination" ? "" : " sec"}`} onClick={() => setGPick(gPick === "destination" ? null : "destination")}>{gDest ? "Destino ✓" : "Destino no mapa"}</button>
       </div>
       {gPick && <div className="warn">Toque no mapa para marcar a {gPick === "origin" ? "origem" : "destino"}.</div>}
-      <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} aria-label="Partida (vazio = agora)" />
+      <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} aria-label="Partida (vazio = todas as horas)" />
+      <div className="mut" style={{ marginBottom: 6 }}>{when ? "Uma pesquisa para essa hora." : "Sem hora: 6 pesquisas (várias horas do dia) para listar todas as opções válidas."}</div>
       <button className="btn" disabled={!gOrigin || !gDest || busy} onClick={search}>{busy ? "A pesquisar…" : "Procurar autocarros Carris"}</button>
       {err && <div className="err">{err}</div>}
-      {matches?.map((m, i) => (
-        <div key={i} style={{ marginTop: 10 }}>
-          <div className="row">
-            {m.line && <Badge line={m.line} />}
-            <div className="grow">{m.step.transitDetails.stopDetails.departureStop.name} → {m.step.transitDetails.stopDetails.arrivalStop.name}<div className="mut">Google: “{m.step.transitDetails.headsign}”</div></div>
-          </div>
-          {m.candidates.length === 0 && <div className="warn">Não foi possível identificar o sentido na rede Carris; escolha a linha manualmente em “Linhas”.</div>}
-          {m.ambiguous && <div className="warn">Vários percursos possíveis — escolha o correto:</div>}
-          {m.candidates.map((c, j) => {
-            const on = sel.some((s) => s.pattern.id === c.pattern_id);
-            return (
-              <div className="row" key={c.pattern_id}>
-                <div className="grow">{c.headsign}{j === 0 && !m.ambiguous ? " (mais provável)" : ""}</div>
-                <button className={`btn${on ? " sec" : ""}`} onClick={() => (on ? unfollow(c.pattern_id) : m.line && follow(m.line, c.pattern_id))}>{on ? "A seguir ✓" : "Seguir"}</button>
-              </div>
-            );
-          })}
-          {m.candidates.length > 1 && <button className="btn sec" onClick={() => m.line && m.candidates.forEach((c) => follow(m.line!, c.pattern_id))}>Seguir todas as opções</button>}
-        </div>
-      ))}
+      {options && options.length > 0 && (
+        <>
+          <h4>{options.length} opç{options.length === 1 ? "ão" : "ões"}</h4>
+          {options.map((o, i) => (
+            <OptionView key={i} option={o} lines={lines} stopById={stopById} sel={sel} showDepartures={false}
+              onFollow={() => o.legs.forEach((l) => { const line = lineOf(l.lineId); if (line) l.patternIds.forEach((p) => follow(line, p)); })}
+              onUnfollow={() => o.legs.forEach((l) => l.patternIds.forEach(unfollow))} />
+          ))}
+          <button className="btn sec" style={{ marginTop: 8 }} onClick={() => followTrip({ options })}>Seguir todas as opções</button>
+          <h4>Guardar viagem</h4>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome da viagem" />
+          <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Categoria">{categories.map((c) => <option key={c}>{c}</option>)}</select>
+          <button className="btn" disabled={saved} onClick={save}>{saved ? "Guardada ✓ (ver em ★)" : "Guardar viagem"}</button>
+        </>
+      )}
     </>
   );
 }
