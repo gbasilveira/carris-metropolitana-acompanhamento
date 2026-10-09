@@ -80,3 +80,19 @@ Algoritmo de ligação validado: (1) filtrar troços com agência "Carris Metrop
 1. Medir durante um dia a idade das posições e a fiabilidade das ETA, para confirmar se a falha do ETA é pontual.
 2. Repetir o teste Google com mais pares, horas e zonas rurais.
 3. Esboçar a PWA (React + MapLibre ou Google Maps JS) com cache offline do GTFS/paragens/padrões e polling das posições.
+
+## 8. Repetição (sessão seguinte, 2026-10-09) — `tools/validar_google.py`
+36 pares (20 rurais: Mafra, Ericeira, Sesimbra, Palmela, Pinhal Novo, Azambuja, Alenquer, Benavente, Samora Correia, Arruda, Sobral, Setúbal; 16 urbanos), 3 dias (sex→seg), horas entre 05:45 e 22:30 UTC, 6 alternativas por par. Script reprodutível; a chave só é lida do ambiente.
+
+- 30/36 pares com rota de transporte público; **6 sem rota** (todos rurais: Azambuja→Aveiras de Cima, Benavente→Samora Correia / Salvaterra de Magos / Vila Franca, Samora Correia→Vila Franca, Setúbal→Águas de Moura).
+- 257 troços TP, **182 Carris Metropolitana** (71 %).
+- **Linha:** 182/182 (100 %).
+- **Paragem ≤ 50 m** (embarque e desembarque): 171/182 (94 %); máximo observado 90 m → o limite de 120 m do algoritmo mantém-se adequado.
+- **Padrão resolvido:** 179/182 (98 %). Falhas: linhas 1234, 3544, 4551 (paragem a 33–88 m sem padrão com embarque antes de desembarque; tratar com escolha do utilizador).
+- **Headsign** com ≥ 50 % de palavras: 163/182 (90 %).
+- Rural vs. urbano: padrão 85/87 (rural), 94/95 (urbano) — o algoritmo generaliza às zonas rurais; a limitação rural é a cobertura do Google (sem rota), não a correspondência.
+
+### ETA oficiais (repetido)
+- Hub `/realtime/eta`: 38 188 linhas, **0 no futuro**; a mais recente tem **61,5 h** (continua parado, mesmo conjunto de 2,5 dias atrás). Resposta em `{data, error, status_code}`.
+- `v2 /arrivals/by_stop`: previsto sempre presente; `estimated_arrival` só em 0–4 linhas por paragem testada, com idade ≈ 63 h. **Continuam inutilizáveis.**
+- Posições do hub: 1 329 veículos, idade mediana **7 s**.
